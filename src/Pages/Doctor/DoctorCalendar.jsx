@@ -35,26 +35,30 @@ const DoctorCalendar = () => {
   }, [appointments]);
 
   const parseCustomDate = (dateString) => {
-    if (!dateString || typeof dateString !== "string") return null;
+  if (!dateString || typeof dateString !== "string") return null;
 
-    const [datePart, timePart] = dateString.split(" at ");
-    if (!datePart || !timePart) return null;
+  const [datePart, timePart] = dateString.split(" at ");
+  if (!datePart || !timePart) return null;
 
-    const [day, month, year] = datePart.split("/");
+  const [day, month, year] = datePart.split("/");
+  let hour, minute;
+
+  // Check if timePart includes AM/PM
+  if (timePart.toLowerCase().includes("am") || timePart.toLowerCase().includes("pm")) {
     let [time, meridian] = timePart.split(" ");
+    [hour, minute] = time.split(":").map(Number);
 
-    if (!time || !meridian) return null; // safeguard against undefined
-    let [hour, minute] = time.split(":");
-    hour = parseInt(hour);
-    minute = parseInt(minute);
-
-    meridian = meridian.toLowerCase(); // safe because of the check above
-
+    meridian = meridian.toLowerCase();
     if (meridian === "pm" && hour !== 12) hour += 12;
     if (meridian === "am" && hour === 12) hour = 0;
+  } else {
+    // 24-hour format
+    [hour, minute] = timePart.split(":").map(Number);
+  }
 
-    return new Date(year, month - 1, day, hour, minute);
-  };
+  return new Date(year, month - 1, day, hour, minute);
+};
+
 
   const formatDateTimeToCustom = (dateObj) => {
     const day = String(dateObj.getDate()).padStart(2, "0");
