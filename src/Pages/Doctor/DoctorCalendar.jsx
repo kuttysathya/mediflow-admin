@@ -156,8 +156,8 @@ const DoctorCalendar = () => {
       />
 
       {selectedEvent && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-96 shadow-lg">
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50" onClick={() => setSelectedEvent(null)}>
+          <div className="bg-white rounded-lg p-6 w-96 shadow-lg" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-bold mb-2">Patient Details</h3>
             <p>
               <b>Name:</b> {selectedEvent.resource?.patientName}
