@@ -1,0 +1,16 @@
+<svg width="300" height="70" viewBox="0 0 300 70" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', sans-serif">
+  <!-- Blue Rounded Cross Icon -->
+  <g>
+    <rect x="0" y="10" width="50" height="50" rx="15" fill="#5c6ef8"/>
+    <!-- Vertical white bar -->
+    <rect x="20" y="20" width="10" height="30" rx="4" fill="white"/>
+    <!-- Horizontal white bar -->
+    <rect x="10" y="30" width="30" height="10" rx="4" fill="white"/>
+  </g>
+
+  <!-- MediFlow Text -->
+  <text x="65" y="38" font-size="26" font-weight="700" fill="#08004d">MediFlow</text>
+
+  <!-- Dashboard Panel Text -->
+  <text x="65" y="58" font-size="14" font-weight="400" fill="#686666">Dashboard Panel</text>
+</svg>
