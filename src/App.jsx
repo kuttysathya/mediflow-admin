@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./Components/Navbar";
 import Sidebar from "./Components/Sidebar";
 import { Route, Routes } from "react-router-dom";
-import Dashboard from "./pages/Admin/Dashboard";
+import Dashboard from "./Pages/Admin/Dashboard";
 import AllApointments from "./Pages/Admin/AllApointments";
 import AddDoctor from "./Pages/Admin/AddDoctor";
 import DoctorsList from "./Pages/Admin/DoctorsList";
