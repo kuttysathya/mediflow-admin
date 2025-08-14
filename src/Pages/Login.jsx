@@ -29,7 +29,7 @@ const Login = () => {
 
   try {
 
-    const res = await axios.get(`http://localhost:5000/${endpoint}?email=${email}&password=${password}`);
+    const res = await axios.get(`https://mediflow-backend-1.onrender.com/${endpoint}?email=${email}&password=${password}`);
     if (res.data.length > 0) {
       if (state === "Admin") {
         localStorage.setItem("aToken", res.data[0].id);

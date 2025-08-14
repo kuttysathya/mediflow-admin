@@ -15,7 +15,7 @@ const DoctorDashboard = () => {
 
       try {
         // Appointments
-        const resAppointments = await fetch("http://localhost:5000/appointments");
+        const resAppointments = await fetch("https://mediflow-backend-1.onrender.com/appointments");
         const dataAppointments = await resAppointments.json();
         const filteredAppointments = dataAppointments.filter(
           (a) => a.doctorId === doctorProfile.id
@@ -23,7 +23,7 @@ const DoctorDashboard = () => {
         setAppointments(filteredAppointments);
 
         // Reviews
-        const resReviews = await fetch("http://localhost:5000/reviews");
+        const resReviews = await fetch("https://mediflow-backend-1.onrender.com/reviews");
         const dataReviews = await resReviews.json();
         const filteredReviews = dataReviews.filter(
           (r) => r.doctorId === doctorProfile.id

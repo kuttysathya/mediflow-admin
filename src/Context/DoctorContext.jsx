@@ -16,7 +16,7 @@ const DoctorContextProvider = (props) => {
   const loadDoctorProfile = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:5000/doctors/${doctorToken}`
+        `https://mediflow-backend-1.onrender.com/doctors/${doctorToken}`
       );
       
       setDoctorProfile(data);
@@ -27,7 +27,7 @@ const DoctorContextProvider = (props) => {
 
   const updateDoctorProfile = async (updatedDoctor) => {
     try {
-      const res = await axios.put(`http://localhost:5000/doctors/${updatedDoctor.id}`, updatedDoctor);
+      const res = await axios.put(`https://mediflow-backend-1.onrender.com/doctors/${updatedDoctor.id}`, updatedDoctor);
       return res.data;
     } catch (error) {
       toast.error("Failed to update profile");
@@ -36,7 +36,7 @@ const DoctorContextProvider = (props) => {
 
   const fetchAppointments = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/appointments");
+      const res = await axios.get("https://mediflow-backend-1.onrender.com/appointments");
       const doctorId = doctorToken;
       const filtered = res.data.filter((a) => a.doctorId === doctorId);
       setAppointments(filtered);
@@ -48,7 +48,7 @@ const DoctorContextProvider = (props) => {
 
   const handleUpdateStatus = async (appointmentId, newStatus) => {
     try {
-      await axios.patch(`http://localhost:5000/appointments/${appointmentId}`, {
+      await axios.patch(`https://mediflow-backend-1.onrender.com/appointments/${appointmentId}`, {
         appstatus: newStatus,
       });
       fetchAppointments();
@@ -60,7 +60,7 @@ const DoctorContextProvider = (props) => {
 
   const handleCancel = async (appointmentId) => {
     try {
-      await axios.delete(`http://localhost:5000/appointments/${appointmentId}`);
+      await axios.delete(`https://mediflow-backend-1.onrender.com/appointments/${appointmentId}`);
       toast.success("Appointment cancelled successfully");
       fetchAppointments();
     } catch (error) {
@@ -72,7 +72,7 @@ const DoctorContextProvider = (props) => {
   const updateAppointmentStatus = async (appointmentId, updatedData) => {
     try {
       await axios.patch(
-        `http://localhost:5000/appointments/${appointmentId}`,
+        `https://mediflow-backend-1.onrender.com/appointments/${appointmentId}`,
         updatedData
       );
       toast.success("Appointment rescheduled");
@@ -88,7 +88,7 @@ const DoctorContextProvider = (props) => {
   // GET
 const fetchPrescriptions = async () => {
   try {
-    const res = await axios.get("http://localhost:5000/prescriptions");
+    const res = await axios.get("https://mediflow-backend-1.onrender.com/prescriptions");
     const doctorId = doctorToken;
     const filtered = res.data.filter((p) => p.doctorId === doctorId);
     setPrescriptions(filtered);
@@ -100,7 +100,7 @@ const fetchPrescriptions = async () => {
 // POST
 const addPrescription = async (newPrescription) => {
   try {
-    await axios.post("http://localhost:5000/prescriptions", newPrescription);
+    await axios.post("https://mediflow-backend-1.onrender.com/prescriptions", newPrescription);
     fetchPrescriptions();
     toast.success("Prescription added");
   } catch (err) {
@@ -111,7 +111,7 @@ const addPrescription = async (newPrescription) => {
 // DELETE
 const deletePrescription = async (id) => {
   try {
-    await axios.delete(`http://localhost:5000/prescriptions/${id}`);
+    await axios.delete(`https://mediflow-backend-1.onrender.com/prescriptions/${id}`);
     fetchPrescriptions();
     toast.success("Prescription deleted");
   } catch (err) {
@@ -122,7 +122,7 @@ const deletePrescription = async (id) => {
 //  PUT
 const editPrescription = async (id, updatedData) => {
   try {
-    await axios.put(`http://localhost:5000/prescriptions/${id}`, {
+    await axios.put(`https://mediflow-backend-1.onrender.com/prescriptions/${id}`, {
       ...updatedData,
       doctorId: doctorToken,
     });
@@ -135,7 +135,7 @@ const editPrescription = async (id, updatedData) => {
 
 const handleAddPrescription = async (id, prescription) => {
   try {
-    await axios.patch(`http://localhost:5000/appointments/${id}`, {
+    await axios.patch(`https://mediflow-backend-1.onrender.com/appointments/${id}`, {
       prescription: prescription,
     });
     fetchAppointments(); 

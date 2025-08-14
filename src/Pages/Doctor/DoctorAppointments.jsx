@@ -95,7 +95,7 @@ const DoctorAppointments = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/appointments/${selectedAppointment.id}`,
+        `https://mediflow-backend-1.onrender.com/appointments/${selectedAppointment.id}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },

@@ -12,7 +12,7 @@ const AdminContextProvider = ({ children }) => {
 
   const getAllDoctors = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/doctors");
+      const { data } = await axios.get("https://mediflow-backend-1.onrender.com/doctors");
       setDoctors(data);
     } catch {
       toast.error("Failed to load doctors");
@@ -21,7 +21,7 @@ const AdminContextProvider = ({ children }) => {
 
   const addDoctor = async (doctor) => {
     try {
-      const { data } = await axios.post("http://localhost:5000/doctors", doctor);
+      const { data } = await axios.post("https://mediflow-backend-1.onrender.com/doctors", doctor);
       setDoctors((prev) => [...prev, data]);
       toast.success("Doctor added");
     } catch {
@@ -31,7 +31,7 @@ const AdminContextProvider = ({ children }) => {
 
   const getAppointments = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/appointments");
+      const { data } = await axios.get("https://mediflow-backend-1.onrender.com/appointments");
       setAppointments(data);
     } catch {
       toast.error("Failed to load appointments");
@@ -40,7 +40,7 @@ const AdminContextProvider = ({ children }) => {
 
   const addAppointment = async (appt) => {
     try {
-      const { data } = await axios.post("http://localhost:5000/appointments", appt);
+      const { data } = await axios.post("https://mediflow-backend-1.onrender.com/appointments", appt);
       setAppointments((prev) => [...prev, data]);
       toast.success("Appointment added");
     } catch {
@@ -50,7 +50,7 @@ const AdminContextProvider = ({ children }) => {
 
   const handleAvailabilityChange = async (doctorId, newStatus) => {
   try {
-    await axios.patch(`http://localhost:5000/doctors/${doctorId}`, {
+    await axios.patch(`https://mediflow-backend-1.onrender.com/doctors/${doctorId}`, {
       availability: newStatus,
     });
     toast.success("Availability updated");

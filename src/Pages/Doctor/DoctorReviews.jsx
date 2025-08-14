@@ -11,7 +11,7 @@ const DoctorReviews = () => {
       if (!doctorProfile) return; // wait until profile is loaded
       try {
         const res = await axios.get(
-          `http://localhost:5000/reviews?doctorName=${encodeURIComponent(doctorProfile.name)}`
+          `https://mediflow-backend-1.onrender.com/reviews?doctorName=${encodeURIComponent(doctorProfile.name)}`
         );
         setReviews(res.data);
       } catch (err) {

@@ -25,7 +25,7 @@ export default function MedicalHistory() {
         setError("");
 
         const patientRes = await fetch(
-          `http://localhost:5000/patients?email=${encodeURIComponent(
+          `https://mediflow-backend-1.onrender.com/patients?email=${encodeURIComponent(
             patientEmail
           )}`
         );
@@ -35,7 +35,7 @@ export default function MedicalHistory() {
         setPatient(patientData[0]);
 
         const appRes = await fetch(
-          `http://localhost:5000/appointments?patientEmail=${encodeURIComponent(
+          `https://mediflow-backend-1.onrender.com/appointments?patientEmail=${encodeURIComponent(
             patientEmail
           )}`
         );

@@ -41,7 +41,7 @@ const AddDoctor = () => {
       image: docImg, 
       };
 
-      await axios.post("http://localhost:5000/doctors", doctorData);
+      await axios.post("https://mediflow-backend-1.onrender.com/doctors", doctorData);
       toast.success("Doctor added successfully!");
       navigate("/admin/doctors");
       
