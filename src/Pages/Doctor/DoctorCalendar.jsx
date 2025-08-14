@@ -117,8 +117,7 @@ const DoctorCalendar = () => {
       <div
         className={`p-1 px-2 rounded shadow-sm ${bgColor} flex justify-between items-center cursor-pointer hover:shadow-md transition`}
         data-tip={tooltipText}
-        data-html={true}
-        onClick={() => setSelectedEvent(event)}   
+        data-html={true}  
       >
         <span className="font-medium text-xs truncate">
           {event.resource?.patientName || "Unknown"} ({status})
@@ -149,6 +148,7 @@ const DoctorCalendar = () => {
         defaultView={Views.WEEK}
         views={["week", "day", "agenda", "month"]}
         components={{ event: EventComponent }}
+        onSelectEvent={(event) => setSelectedEvent(event)}
         onEventDrop={handleEventDrop}
         resizable
         draggableAccessor={() => true}
