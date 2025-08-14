@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Calendar, Views, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
+import ReactTooltip from "react-tooltip";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 
@@ -86,32 +87,42 @@ const DoctorCalendar = () => {
   };
 
   const EventComponent = ({ event }) => {
-    const status = event.resource?.appstatus || "Pending";
-    let bgColor = "bg-primary text-white";
+  const status = event.resource?.appstatus || "Pending";
 
-    if (status === "Confirmed") bgColor = "bg-green-500 text-white";
-    else if (status === "Cancelled") bgColor = "bg-red-500 text-white";
-    else if (status === "Rescheduled") bgColor = "bg-yellow-400 text-black";
-    else if (status === "Completed") bgColor = "bg-primary text-white";
+  // Background color based on status
+  const bgColor =
+    status === "Confirmed"
+      ? "bg-green-500 text-white"
+      : status === "Cancelled"
+      ? "bg-red-500 text-white"
+      : status === "Rescheduled"
+      ? "bg-yellow-400 text-black"
+      : "bg-primary text-white";
 
-    const tooltipText = `
-Patient: ${event.resource?.patientName || "Unknown"}
-Age: ${event.resource?.patientAge || "-"}
-Gender: ${event.resource?.patientGender || "-"}
-Phone: ${event.resource?.patientPhone || "-"}
-Email: ${event.resource?.patientEmail || "-"}
-Time: ${event.resource?.datetime || "-"}
-Status: ${status}
+  const tooltipId = `tooltip-${event.id}`;
+
+  // Tooltip text with HTML line breaks
+  const tooltipText = `
+<b>Patient:</b> ${event.resource?.patientName || "Unknown"}<br/>
+<b>Age:</b> ${event.resource?.patientAge || "-"}<br/>
+<b>Gender:</b> ${event.resource?.patientGender || "-"}<br/>
+<b>Phone:</b> ${event.resource?.patientPhone || "-"}<br/>
+<b>Email:</b> ${event.resource?.patientEmail || "-"}<br/>
+<b>Time:</b> ${event.resource?.datetime || "-"}<br/>
+<b>Status:</b> ${status}
 `;
 
-    return (
+  return (
+    <>
       <div
-        className={`p-1 px-2 rounded shadow-md ${bgColor} flex justify-between items-center`}
-        title={tooltipText}
+        className={`p-1 px-2 rounded shadow-md ${bgColor} flex justify-between items-center cursor-pointer`}
+        data-tip={tooltipText}
+        data-for={tooltipId}
       >
         <span className="font-medium text-sm">
           {event.resource?.patientName || "Unknown"} ({status})
         </span>
+
         {status !== "Cancelled" && (
           <button
             onClick={() => handleCancel(event.id)}
@@ -121,8 +132,19 @@ Status: ${status}
           </button>
         )}
       </div>
-    );
-  };
+
+      {/* Single ReactTooltip per event */}
+      <ReactTooltip
+        id={tooltipId}
+        place="top"
+        type="dark"
+        effect="solid"
+        html={true}
+        multiline={true}
+      />
+    </>
+  );
+};
 
   return (
     <div className="p-4">
