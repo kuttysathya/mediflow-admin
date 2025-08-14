@@ -11,7 +11,8 @@ const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
 
 const DoctorCalendar = () => {
-  const { appointments, handleCancel, updateAppointmentStatus } = useContext(DoctorContext);
+  const { appointments, handleCancel, updateAppointmentStatus } =
+    useContext(DoctorContext);
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
@@ -35,30 +36,32 @@ const DoctorCalendar = () => {
   }, [appointments]);
 
   const parseCustomDate = (dateString) => {
-  if (!dateString || typeof dateString !== "string") return null;
+    if (!dateString || typeof dateString !== "string") return null;
 
-  const [datePart, timePart] = dateString.split(" at ");
-  if (!datePart || !timePart) return null;
+    const [datePart, timePart] = dateString.split(" at ");
+    if (!datePart || !timePart) return null;
 
-  const [day, month, year] = datePart.split("/");
-  let hour, minute;
+    const [day, month, year] = datePart.split("/");
+    let hour, minute;
 
-  // Check if timePart includes AM/PM
-  if (timePart.toLowerCase().includes("am") || timePart.toLowerCase().includes("pm")) {
-    let [time, meridian] = timePart.split(" ");
-    [hour, minute] = time.split(":").map(Number);
+    // Check if timePart includes AM/PM
+    if (
+      timePart.toLowerCase().includes("am") ||
+      timePart.toLowerCase().includes("pm")
+    ) {
+      let [time, meridian] = timePart.split(" ");
+      [hour, minute] = time.split(":").map(Number);
 
-    meridian = meridian.toLowerCase();
-    if (meridian === "pm" && hour !== 12) hour += 12;
-    if (meridian === "am" && hour === 12) hour = 0;
-  } else {
-    // 24-hour format
-    [hour, minute] = timePart.split(":").map(Number);
-  }
+      meridian = meridian.toLowerCase();
+      if (meridian === "pm" && hour !== 12) hour += 12;
+      if (meridian === "am" && hour === 12) hour = 0;
+    } else {
+      // 24-hour format
+      [hour, minute] = timePart.split(":").map(Number);
+    }
 
-  return new Date(year, month - 1, day, hour, minute);
-};
-
+    return new Date(year, month - 1, day, hour, minute);
+  };
 
   const formatDateTimeToCustom = (dateObj) => {
     const day = String(dateObj.getDate()).padStart(2, "0");
@@ -91,9 +94,20 @@ const DoctorCalendar = () => {
     else if (status === "Rescheduled") bgColor = "bg-yellow-400 text-black";
     else if (status === "Completed") bgColor = "bg-primary text-white";
 
+    const tooltipText = `
+Patient: ${event.resource?.patientName || "Unknown"}
+Age: ${event.resource?.patientAge || "-"}
+Gender: ${event.resource?.patientGender || "-"}
+Phone: ${event.resource?.patientPhone || "-"}
+Email: ${event.resource?.patientEmail || "-"}
+Time: ${event.resource?.datetime || "-"}
+Status: ${status}
+`;
+
     return (
       <div
         className={`p-1 px-2 rounded shadow-md ${bgColor} flex justify-between items-center`}
+        title={tooltipText}
       >
         <span className="font-medium text-sm">
           {event.resource?.patientName || "Unknown"} ({status})
