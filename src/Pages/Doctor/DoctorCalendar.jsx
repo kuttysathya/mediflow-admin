@@ -15,6 +15,8 @@ const DoctorCalendar = () => {
   const { appointments, handleCancel, updateAppointmentStatus } =
     useContext(DoctorContext);
   const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
 
   // Convert string to Date object
   const parseCustomDate = (dateString) => {
@@ -116,6 +118,7 @@ const DoctorCalendar = () => {
         className={`p-1 px-2 rounded shadow-sm ${bgColor} flex justify-between items-center cursor-pointer hover:shadow-md transition`}
         data-tip={tooltipText}
         data-html={true}
+        onClick={() => setSelectedEvent(event)}   
       >
         <span className="font-medium text-xs truncate">
           {event.resource?.patientName || "Unknown"} ({status})
