@@ -148,6 +148,7 @@ const DoctorCalendar = () => {
         defaultView={Views.WEEK}
         views={["week", "day", "agenda", "month"]}
         components={{ event: EventComponent }}
+        selectable
         onSelectEvent={(event) => setSelectedEvent(event)}
         onEventDrop={handleEventDrop}
         resizable
