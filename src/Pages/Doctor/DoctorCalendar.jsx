@@ -151,7 +151,62 @@ const DoctorCalendar = () => {
         draggableAccessor={() => true}
         style={{ height: 600 }}
       />
-      <ReactTooltip place="top" type="dark" effect="solid" html={true} multiline={true} />
+
+      {selectedEvent && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-96 shadow-lg">
+            <h3 className="text-lg font-bold mb-2">Patient Details</h3>
+            <p>
+              <b>Name:</b> {selectedEvent.resource?.patientName}
+            </p>
+            <p>
+              <b>Age:</b> {selectedEvent.resource?.patientAge}
+            </p>
+            <p>
+              <b>Gender:</b> {selectedEvent.resource?.patientGender}
+            </p>
+            <p>
+              <b>Phone:</b> {selectedEvent.resource?.patientPhone}
+            </p>
+            <p>
+              <b>Email:</b> {selectedEvent.resource?.patientEmail}
+            </p>
+            <p>
+              <b>Time:</b> {selectedEvent.resource?.datetime}
+            </p>
+            <p>
+              <b>Status:</b> {selectedEvent.resource?.appstatus}
+            </p>
+            <div className="mt-4 flex justify-end gap-2">
+              {selectedEvent.resource?.appstatus !== "Cancelled" && (
+                <button
+                  onClick={() => {
+                    handleCancel(selectedEvent.id);
+                    setSelectedEvent(null);
+                  }}
+                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                >
+                  Cancel
+                </button>
+              )}
+              <button
+                onClick={() => setSelectedEvent(null)}
+                className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <ReactTooltip
+        place="top"
+        type="dark"
+        effect="solid"
+        html={true}
+        multiline={true}
+      />
     </div>
   );
 };
