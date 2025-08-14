@@ -12,58 +12,32 @@ const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
 
 const DoctorCalendar = () => {
-  const { appointments, handleCancel, updateAppointmentStatus } =
-    useContext(DoctorContext);
+  const { appointments, handleCancel, updateAppointmentStatus } = useContext(DoctorContext);
   const [events, setEvents] = useState([]);
 
-  useEffect(() => {
-    const parsedEvents = appointments
-      .map((a) => {
-        const parsedDate = parseCustomDate(a.datetime);
-        if (!parsedDate || isNaN(parsedDate.getTime())) {
-          console.warn("Invalid date format:", a.datetime);
-          return null;
-        }
-        return {
-          id: a.id,
-          title: `${a.patientName || "Unknown Patient"}`,
-          start: parsedDate,
-          end: new Date(parsedDate.getTime() + 30 * 60000),
-          resource: a,
-        };
-      })
-      .filter(Boolean);
-    setEvents(parsedEvents);
-  }, [appointments]);
-
+  // Convert string to Date object
   const parseCustomDate = (dateString) => {
     if (!dateString || typeof dateString !== "string") return null;
-
     const [datePart, timePart] = dateString.split(" at ");
     if (!datePart || !timePart) return null;
 
     const [day, month, year] = datePart.split("/");
     let hour, minute;
 
-    // Check if timePart includes AM/PM
-    if (
-      timePart.toLowerCase().includes("am") ||
-      timePart.toLowerCase().includes("pm")
-    ) {
+    if (timePart.toLowerCase().includes("am") || timePart.toLowerCase().includes("pm")) {
       let [time, meridian] = timePart.split(" ");
       [hour, minute] = time.split(":").map(Number);
-
       meridian = meridian.toLowerCase();
       if (meridian === "pm" && hour !== 12) hour += 12;
       if (meridian === "am" && hour === 12) hour = 0;
     } else {
-      // 24-hour format
       [hour, minute] = timePart.split(":").map(Number);
     }
 
     return new Date(year, month - 1, day, hour, minute);
   };
 
+  // Convert Date object back to string
   const formatDateTimeToCustom = (dateObj) => {
     const day = String(dateObj.getDate()).padStart(2, "0");
     const month = String(dateObj.getMonth() + 1).padStart(2, "0");
@@ -75,6 +49,27 @@ const DoctorCalendar = () => {
     return `${day}/${month}/${year} at ${hour}:${minute} ${meridian}`;
   };
 
+  // Sync events from context
+  useEffect(() => {
+    const parsedEvents = appointments
+      .map((a) => {
+        const parsedDate = parseCustomDate(a.datetime);
+        if (!parsedDate || isNaN(parsedDate.getTime())) {
+          console.warn("Invalid date format:", a.datetime);
+          return null;
+        }
+        return {
+          id: a.id,
+          title: a.patientName || "Unknown Patient",
+          start: parsedDate,
+          end: new Date(parsedDate.getTime() + 30 * 60000),
+          resource: a,
+        };
+      })
+      .filter(Boolean);
+    setEvents(parsedEvents);
+  }, [appointments]);
+
   const handleEventDrop = ({ event, start }) => {
     const newDate = formatDateTimeToCustom(start);
     const updatedEvent = {
@@ -82,69 +77,61 @@ const DoctorCalendar = () => {
       datetime: newDate,
       appstatus: "Rescheduled",
     };
-
     updateAppointmentStatus(event.id, updatedEvent);
   };
 
+  // Custom event rendering
   const EventComponent = ({ event }) => {
-  const status = event.resource?.appstatus || "Pending";
+    const status = event.resource?.appstatus || "Pending";
+    const tooltipId = `tooltip-${event.id}`;
 
-  // Background color based on status
-  const bgColor =
-    status === "Confirmed"
-      ? "bg-green-500 text-white"
-      : status === "Cancelled"
-      ? "bg-red-500 text-white"
-      : status === "Rescheduled"
-      ? "bg-yellow-400 text-black"
-      : "bg-primary text-white";
+    // Status colors
+    const bgColor =
+      status === "Confirmed"
+        ? "bg-green-500 text-white"
+        : status === "Cancelled"
+        ? "bg-red-500 text-white"
+        : status === "Rescheduled"
+        ? "bg-yellow-400 text-black"
+        : "bg-blue-500 text-white";
 
-  const tooltipId = `tooltip-${event.id}`;
+    // Tooltip content
+    const tooltipText = `
+      <b>Patient:</b> ${event.resource?.patientName || "Unknown"}<br/>
+      <b>Age:</b> ${event.resource?.patientAge || "-"}<br/>
+      <b>Gender:</b> ${event.resource?.patientGender || "-"}<br/>
+      <b>Phone:</b> ${event.resource?.patientPhone || "-"}<br/>
+      <b>Email:</b> ${event.resource?.patientEmail || "-"}<br/>
+      <b>Time:</b> ${event.resource?.datetime || "-"}<br/>
+      <b>Status:</b> ${status}
+    `;
 
-  // Tooltip text with HTML line breaks
-  const tooltipText = `
-<b>Patient:</b> ${event.resource?.patientName || "Unknown"}<br/>
-<b>Age:</b> ${event.resource?.patientAge || "-"}<br/>
-<b>Gender:</b> ${event.resource?.patientGender || "-"}<br/>
-<b>Phone:</b> ${event.resource?.patientPhone || "-"}<br/>
-<b>Email:</b> ${event.resource?.patientEmail || "-"}<br/>
-<b>Time:</b> ${event.resource?.datetime || "-"}<br/>
-<b>Status:</b> ${status}
-`;
-
-  return (
-    <>
-      <div
-        className={`p-1 px-2 rounded shadow-md ${bgColor} flex justify-between items-center cursor-pointer`}
-        data-tip={tooltipText}
-        data-for={tooltipId}
-      >
-        <span className="font-medium text-sm">
-          {event.resource?.patientName || "Unknown"} ({status})
-        </span>
-
-        {status !== "Cancelled" && (
-          <button
-            onClick={() => handleCancel(event.id)}
-            className="ml-2 text-xs text-white hover:underline"
-          >
-            Cancel
-          </button>
-        )}
-      </div>
-
-      {/* Single ReactTooltip per event */}
-      <ReactTooltip
-        id={tooltipId}
-        place="top"
-        type="dark"
-        effect="solid"
-        html={true}
-        multiline={true}
-      />
-    </>
-  );
-};
+    return (
+      <>
+        <div
+          className={`p-1 px-2 rounded shadow-sm ${bgColor} flex justify-between items-center cursor-pointer hover:shadow-md transition`}
+          data-tip={tooltipText}
+          data-for={tooltipId}
+        >
+          <span className="font-medium text-xs truncate">
+            {event.resource?.patientName || "Unknown"} ({status})
+          </span>
+          {status !== "Cancelled" && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCancel(event.id);
+              }}
+              className="ml-2 text-[10px] bg-white text-red-600 px-1 rounded hover:bg-red-100"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
+        <ReactTooltip id={tooltipId} place="top" type="dark" effect="solid" html={true} multiline={true} />
+      </>
+    );
+  };
 
   return (
     <div className="p-4">
