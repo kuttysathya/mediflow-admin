@@ -12,7 +12,8 @@ const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
 
 const DoctorCalendar = () => {
-  const { appointments, handleCancel, updateAppointmentStatus } = useContext(DoctorContext);
+  const { appointments, handleCancel, updateAppointmentStatus } =
+    useContext(DoctorContext);
   const [events, setEvents] = useState([]);
 
   // Convert string to Date object
@@ -24,7 +25,10 @@ const DoctorCalendar = () => {
     const [day, month, year] = datePart.split("/");
     let hour, minute;
 
-    if (timePart.toLowerCase().includes("am") || timePart.toLowerCase().includes("pm")) {
+    if (
+      timePart.toLowerCase().includes("am") ||
+      timePart.toLowerCase().includes("pm")
+    ) {
       let [time, meridian] = timePart.split(" ");
       [hour, minute] = time.split(":").map(Number);
       meridian = meridian.toLowerCase();
@@ -80,12 +84,13 @@ const DoctorCalendar = () => {
     updateAppointmentStatus(event.id, updatedEvent);
   };
 
-  // Custom event rendering
+  useEffect(() => {
+    ReactTooltip.rebuild();
+  }, [events]);
+
   const EventComponent = ({ event }) => {
     const status = event.resource?.appstatus || "Pending";
-    const tooltipId = `tooltip-${event.id}`;
 
-    // Status colors
     const bgColor =
       status === "Confirmed"
         ? "bg-green-500 text-white"
@@ -107,29 +112,26 @@ const DoctorCalendar = () => {
     `;
 
     return (
-      <>
-        <div
-          className={`p-1 px-2 rounded shadow-sm ${bgColor} flex justify-between items-center cursor-pointer hover:shadow-md transition`}
-          data-tip={tooltipText}
-          data-for={tooltipId}
-        >
-          <span className="font-medium text-xs truncate">
-            {event.resource?.patientName || "Unknown"} ({status})
-          </span>
-          {status !== "Cancelled" && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleCancel(event.id);
-              }}
-              className="ml-2 text-[10px] bg-white text-red-600 px-1 rounded hover:bg-red-100"
-            >
-              Cancel
-            </button>
-          )}
-        </div>
-        <ReactTooltip id={tooltipId} place="top" type="dark" effect="solid" html={true} multiline={true} />
-      </>
+      <div
+        className={`p-1 px-2 rounded shadow-sm ${bgColor} flex justify-between items-center cursor-pointer hover:shadow-md transition`}
+        data-tip={tooltipText}
+        data-html={true}
+      >
+        <span className="font-medium text-xs truncate">
+          {event.resource?.patientName || "Unknown"} ({status})
+        </span>
+        {status !== "Cancelled" && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleCancel(event.id);
+            }}
+            className="ml-2 text-[10px] bg-white text-red-600 px-1 rounded hover:bg-red-100"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     );
   };
 
@@ -149,6 +151,7 @@ const DoctorCalendar = () => {
         draggableAccessor={() => true}
         style={{ height: 600 }}
       />
+      <ReactTooltip place="top" type="dark" effect="solid" html={true} multiline={true} />
     </div>
   );
 };
