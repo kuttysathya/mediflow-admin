@@ -24,7 +24,7 @@ const DoctorCalendar = () => {
         }
         return {
           id: a.id,
-          title: `${a.patientName}`,
+          title: `${a.patientName || "Unknown Patient"}`,
           start: parsedDate,
           end: new Date(parsedDate.getTime() + 30 * 60000),
           resource: a,
@@ -35,15 +35,24 @@ const DoctorCalendar = () => {
   }, [appointments]);
 
   const parseCustomDate = (dateString) => {
+    if (!dateString || typeof dateString !== "string") return null;
+
     const [datePart, timePart] = dateString.split(" at ");
     if (!datePart || !timePart) return null;
+
     const [day, month, year] = datePart.split("/");
     let [time, meridian] = timePart.split(" ");
+
+    if (!time || !meridian) return null; // safeguard against undefined
     let [hour, minute] = time.split(":");
     hour = parseInt(hour);
     minute = parseInt(minute);
-    if (meridian.toLowerCase() === "pm" && hour !== 12) hour += 12;
-    if (meridian.toLowerCase() === "am" && hour === 12) hour = 0;
+
+    meridian = meridian.toLowerCase(); // safe because of the check above
+
+    if (meridian === "pm" && hour !== 12) hour += 12;
+    if (meridian === "am" && hour === 12) hour = 0;
+
     return new Date(year, month - 1, day, hour, minute);
   };
 
@@ -70,20 +79,20 @@ const DoctorCalendar = () => {
   };
 
   const EventComponent = ({ event }) => {
-    const status = event.resource.appstatus;
+    const status = event.resource?.appstatus || "Pending";
     let bgColor = "bg-primary text-white";
 
     if (status === "Confirmed") bgColor = "bg-green-500 text-white";
     else if (status === "Cancelled") bgColor = "bg-red-500 text-white";
     else if (status === "Rescheduled") bgColor = "bg-yellow-400 text-black";
-    else if (status === "Completed") bgColor = "bg-primary text-white"
+    else if (status === "Completed") bgColor = "bg-primary text-white";
 
     return (
       <div
         className={`p-1 px-2 rounded shadow-md ${bgColor} flex justify-between items-center`}
       >
         <span className="font-medium text-sm">
-          {event.resource.patientName} ({status})
+          {event.resource?.patientName || "Unknown"} ({status})
         </span>
         {status !== "Cancelled" && (
           <button
