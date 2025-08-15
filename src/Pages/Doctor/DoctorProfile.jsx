@@ -32,7 +32,7 @@ const DoctorProfile = () => {
     <div className="w-5xl mx-auto bg-white p-8 rounded-lg shadow-md mt-10">
       <h2 className="text-2xl font-bold mb-6">My Profile</h2>
 
-      <div className="flex flex-col overflow-auto md:flex-row items-center md:items-start gap-6">
+      <div className="flex flex-col md:flex-row md:items-start gap-6">
         {/* Profile image */}
         <div className="w-full md:w-1/3 flex flex-col items-center">
           <label htmlFor="image" className="cursor-pointer">
@@ -53,7 +53,7 @@ const DoctorProfile = () => {
         </div>
 
         {/* Profile fields */}
-        <div className="w-full md:w-1/3 grid grid-cols-1 md:grid-row gap-4">
+        <div className="w-full md:w-3/4 grid grid-cols-1 md:grid-cols-2 gap-4">
           {[
             ["Name", "name"],
             ["Email", "email"],
