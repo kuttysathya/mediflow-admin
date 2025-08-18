@@ -63,7 +63,7 @@ const DoctorProfile = () => {
             ["Fees (₹)", "fees"],
           ].map(([label, field]) => (
             <div key={field}>
-              <label className="font-semibold">{label}</label>
+              <label className="font-semibold mb-1">{label}</label>
               {isEdit ? (
                 <input
                   type="text"
@@ -79,7 +79,7 @@ const DoctorProfile = () => {
 
           {/* Availability */}
           <div>
-            <label className="font-semibold">Available?</label>
+            <label className="font-semibold mb-1">Available?</label>
             {isEdit ? (
               <div className="flex gap-2 items-center">
                 <input
@@ -98,7 +98,7 @@ const DoctorProfile = () => {
 
           {/* Address */}
           <div className="col-span-2">
-            <label className="font-semibold">Address Line 1</label>
+            <label className="font-semibold mb-1">Address Line 1</label>
             {isEdit ? (
               <input
                 type="text"
@@ -119,7 +119,7 @@ const DoctorProfile = () => {
             )}
           </div>
           <div className="col-span-2">
-            <label className="font-semibold">Address Line 2</label>
+            <label className="font-semibold mb-1">Address Line 2</label>
             {isEdit ? (
               <input
                 type="text"
