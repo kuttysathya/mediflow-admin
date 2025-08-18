@@ -10,7 +10,6 @@ import { DoctorContext } from "../../Context/DoctorContext";
 
 const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
-
 const DoctorCalendar = () => {
   const { appointments, handleCancel, updateAppointmentStatus } =
     useContext(DoctorContext);
@@ -159,7 +158,7 @@ const DoctorCalendar = () => {
       {selectedEvent && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50" onClick={() => setSelectedEvent(null)}>
           <div className="bg-white rounded-lg p-6 w-96 shadow-lg" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-lg font-bold mb-2">Patient Details</h3>
+            <h3 className="text-lg font-bold mb-2">🧑‍⚕️Patient Details</h3>
             <p>
               <b>Name:</b> {selectedEvent.resource?.patientName}
             </p>
