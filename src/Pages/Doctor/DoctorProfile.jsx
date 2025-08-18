@@ -53,7 +53,7 @@ const DoctorProfile = () => {
         </div>
 
         {/* Profile fields */}
-        <div className="w-full md:w-3/4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="w-full md:w-3/4 grid grid-cols-2 md:grid-cols-2 gap-4">
           {[
             ["Name", "name"],
             ["Email", "email"],
